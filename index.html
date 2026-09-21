@@ -140,6 +140,8 @@ svg{width:22px;height:22px;flex-shrink:0}.eyebrow{font-family:var(--font-body);f
 
 .filter-panel>.cats,.filter-panel>.note,.filter-panel>.row{margin:12px;padding-inline:0}.filter-panel>.row{padding-bottom:8px}.stop:not(li):before,.stop:not(li):after{display:none}.stop:not(li)>.body{box-shadow:none;background:transparent;border:0;padding:8px 0}
 
+.tabs button{min-width:0;font-size:.66rem}.tabs button svg{width:21px;height:21px}.store-tip{background:var(--green-soft);border:1px solid var(--rule);border-radius:12px;padding:16px;margin:16px 0}.store-tip strong{color:var(--green)}.store-tip p{font-size:.86rem;line-height:1.6;margin:6px 0 0}.store-card h3{font:1.4rem Georgia,serif;color:var(--green)}.store-card>p:not(.eyebrow):not(.note):not(.meta){font-size:.92rem}.store-hours{padding-top:10px;border-top:1px solid var(--rule)}#v-stores .cats{flex-wrap:wrap}#v-stores .cats .chip{min-height:44px}@media(max-width:360px){.tabs{padding-inline:0}.tabs button{font-size:.58rem}.tabs button svg{width:20px;height:20px}.tabs button.on:before{width:28px}}
+
 </style>
 </head>
 <body>
@@ -644,6 +646,27 @@ addEventListener('online',tick);addEventListener('offline',tick);
  };
  const priorInfo=renderInfo;renderInfo=function(){priorInfo();$('#v-info').insertAdjacentHTML('beforeend','<p class="photo-credit">French Quarter photograph by <a href="https://unsplash.com/photos/cyZuN_AViJQ" target="_blank" rel="noopener">Stella He / Unsplash</a>.</p>');};
  renderAll();
+})();
+
+// Addresses checked September 21, 2026. No live inventory or opening-status claims.
+(()=>{
+ const stores=[
+ {name:'CVS · Girod Street',type:'pharmacy',area:'CBD · handy for Virgin',address:'939 Girod St, Suite 160, New Orleans, LA 70113',use:'Toiletries, sunscreen, first-aid supplies, over-the-counter essentials, snacks and drinks.',hours:'Store: listed 7 a.m.–10 p.m. daily. Pharmacy has separate hours and a lunch closure; check before going.',phone:'5045816959',url:'https://www.cvs.com/store-locator/new-orleans-la-pharmacies/939-girod-st-suite-160-new-orleans-la-70113/storeid=10559'},
+ {name:'Rouses Market · Baronne',type:'grocery',area:'CBD · same street as both hotels',address:'701 Baronne St, New Orleans, LA 70113',use:'A full grocery stop for bottled water, fruit, breakfast supplies, snacks and room provisions.',hours:'Listed 6 a.m.–11 p.m. daily.',phone:'5042273838',url:'https://www.rouses.com/locations/rouses-store-46/'},
+ {name:'CVS · Canal Street',type:'pharmacy',area:'Canal Street · useful from NOPSI',address:'800 Canal St, New Orleans, LA 70112',use:'Personal-care supplies, travel essentials and quick snacks when heading toward the Quarter.',hours:'Store listing currently shows 24-hour retail. Do not assume a 24-hour pharmacy; verify the branch details.',phone:'5045287099',url:'https://www.cvs.com/store-locator/cvs-pharmacy-locations/Louisiana/New-Orleans'},
+ {name:'Walgreens · Royal Street',type:'pharmacy',area:'French Quarter · near Canal',address:'134 Royal St, New Orleans, LA 70130',use:'A Quarter option for forgotten toiletries, first-aid basics and small incidentals. Check availability for specific items.',hours:'Check the branch page for current retail and pharmacy hours.',url:'https://www.walgreens.com/locator/walgreens-134-royal-st-new-orleans-la-70130/id=9063'},
+ {name:'Brothers Food Mart · Carondelet',type:'convenience',area:'CBD · near Canal Street',address:'148 Carondelet St, New Orleans, LA 70130',use:'A quick stop for drinks, packaged snacks and a small convenience-store shop.',hours:'Hours not verified. Check Maps before making a special trip.',url:'https://www.waze.com/live-map/directions/us/la/new-orleans/brothers-food-mart?to=place.ChIJrRqxaAumIIYR59C1k6foKEo'},
+ {name:'Rouses Market · Royal Street',type:'grocery',area:'French Quarter · during your walks',address:'701 Royal St, New Orleans, LA 70116',use:'Pick up groceries, water or snacks while you are already exploring the Quarter.',hours:'Listed 7 a.m.–10 p.m. daily.',phone:'5045231353',url:'https://www.rouses.com/locations/'},
+ {name:'CVS · Decatur Street',type:'pharmacy',area:'French Quarter · near Jackson Square',address:'620 Decatur St, New Orleans, LA 70130',use:'Another option for personal-care items and snacks during a riverfront or Quarter outing.',hours:'Check this branch’s current retail and pharmacy hours.',phone:'5045239424',url:'https://www.cvs.com/store-locator/cvs-pharmacy-locations/Louisiana/New-Orleans'}
+ ];
+ let category='all';const labels={all:'All stores',pharmacy:'Pharmacy',convenience:'Convenience',grocery:'Grocery'};
+ const shopIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18l-2-7H5Zm1 0v11h16V10M9 21v-7h6v7M8 3l-1 7m9-7 1 7"/></svg>';
+ document.querySelector('#v-info').insertAdjacentHTML('beforebegin','<section class="view" id="v-stores" aria-label="Stores"></section>');
+ document.querySelector('.tabs [data-v="info"]').insertAdjacentHTML('beforebegin',`<button data-v="stores" aria-current="false">${shopIcon}<span>Stores</span></button>`);
+ function renderStores(){const list=stores.filter(s=>category==='all'||s.type===category);$('#v-stores').innerHTML=`<h2 class="page-heading">The little things,<br>close at hand.</h2><p class="sub">Water for the room, forgotten toiletries, a snack for later. Useful stops around your hotels and the Quarter.</p><div class="store-tip"><strong>Start near the hotel</strong><p>For a grocery run, try Rouses on Baronne. For toiletries and pharmacy needs, check CVS on Girod or Canal.</p></div><div class="cats" aria-label="Store type">${Object.entries(labels).map(([k,l])=>`<button class="chip ${category===k?'on':''}" data-store-category="${k}" aria-pressed="${category===k}">${l}</button>`).join('')}</div><p class="note">${list.length} ${list.length===1?'store':'stores'} · Listings checked September 21, 2026. Hours can change; pharmacy hours may differ. Stock is not verified.</p>${list.map(s=>`<article class="card store-card"><p class="eyebrow">${labels[s.type]} · ${s.area}</p><h3>${s.name}</h3><p class="meta">${s.address}</p><p>${s.use}</p><p class="note store-hours">${s.hours}</p><div class="row"><a class="btn primary" href="https://maps.apple.com/?daddr=${encodeURIComponent(s.address)}&dirflg=w" target="_blank" rel="noopener">Directions ↗</a>${s.phone?`<a class="btn" href="tel:+1${s.phone}">Call store</a>`:''}<a class="btn" href="${s.url}" target="_blank" rel="noopener">${s.type==='convenience'?'Check listing':'Store & hours'} ↗</a></div></article>`).join('')}<p class="note">The saved list works offline. Directions, calls and current store listings need a connection.</p>`;}
+ const priorRender=renderAll;renderAll=function(){priorRender();safe(renderStores,'stores');};
+ document.addEventListener('click',e=>{const b=e.target.closest('[data-store-category]');if(b){category=b.dataset.storeCategory;renderStores();}});
+ renderStores();
 })();
 
 </script>
