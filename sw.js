@@ -1,4 +1,4 @@
-const CACHE='nola-refined-20261108-v23';
+const CACHE='nola-refined-20261109-v24';
 const ASSETS=['./','./index.html','./itinerary.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png','./quarter.jpg','./shared-sync.js','./sync-core.js'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())if(k.startsWith('nola-refined-')&&k!==CACHE)await caches.delete(k);await self.clients.claim();for(const c of await self.clients.matchAll({type:'window'}))c.postMessage({type:'shell-updated'});})()));
